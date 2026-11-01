@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>InvoicePro - Free Invoice Maker</title>
+
+  <meta name="description" content="Create professional invoices online for free.">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Invoice<span>Pro</span></div>
+  <span class="tag">FREE INVOICE MAKER</span>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Create Professional Invoices</h1>
+    <p>Simple, fast and free invoice generator.</p>
+  </section>
+
+  <section class="panel">
+
+    <h2>Business Details</h2>
+
+    <input id="business" placeholder="Business Name">
+    <input id="businessEmail" placeholder="Business Email">
+
+    <h2>Customer Details</h2>
+
+    <input id="customer" placeholder="Customer Name">
+    <input id="customerEmail" placeholder="Customer Email">
+
+    <h2>Invoice Details</h2>
+
+    <input id="invoiceNo" placeholder="Invoice Number">
+    <input id="invoiceDate" type="date">
+
+    <h2>Products / Services</h2>
+
+    <div id="products"></div>
+
+    <button class="add" onclick="addProduct()">
+      + Add Product
+    </button>
+
+    <h2>GST Settings</h2>
+
+    <select id="gst" onchange="calculate()">
+      <option value="0">No GST</option>
+      <option value="5">5% GST</option>
+      <option value="12">12% GST</option>
+      <option value="18">18% GST</option>
+      <option value="28">28% GST</option>
+    </select>
+
+    <div class="total">
+      <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
+      <p>GST: ₹<span id="tax">0.00</span></p>
+      <h2>Total: ₹<span id="grandTotal">0.00</span></h2>
+    </div>
+
+    <button class="generate" onclick="generateInvoice()">
+      Generate Invoice
+    </button>
+
+    <button class="download" onclick="window.print()">
+      Download / Print PDF
+    </button>
+
+  </section>
+
+  <section id="preview" class="preview"></section>
+
+</main>
+
+<footer>
+  Made with ❤️ | InvoicePro
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
