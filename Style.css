@@ -1,0 +1,202 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f6fb;
+  color: #20243a;
+}
+
+header {
+  background: #171b35;
+  color: white;
+  padding: 20px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #8b78ff;
+}
+
+.tag {
+  font-size: 11px;
+  color: #b8b5ff;
+}
+
+main {
+  max-width: 850px;
+  margin: 35px auto;
+  padding: 15px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #777;
+}
+
+.panel {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px #0000000c;
+}
+
+h2 {
+  font-size: 19px;
+  margin: 22px 0 15px;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+}
+
+input:focus, select:focus {
+  border-color: #7965ff;
+}
+
+.product {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 8px;
+}
+
+.product button {
+  background: #ffeded;
+  color: #d33;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  height: 43px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 13px;
+  font-weight: bold;
+}
+
+.add {
+  background: #eeeaff;
+  color: #6854df;
+  width: 100%;
+}
+
+.total {
+  background: #f5f3ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.total p {
+  margin-bottom: 10px;
+}
+
+.total h2 {
+  color: #624bdb;
+}
+
+.generate, .download {
+  width: 100%;
+  margin-top: 15px;
+  color: white;
+  background: #7059ec;
+}
+
+.download {
+  background: #171b35;
+}
+
+.preview {
+  margin-top: 25px;
+}
+
+.preview:empty {
+  display: none;
+}
+
+.invoice {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.invoice table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice th, .invoice td {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 5px;
+  text-align: left;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #888;
+}
+
+@media(max-width: 550px) {
+  .hero h1 {
+    font-size: 25px;
+  }
+
+  .product {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel {
+    padding: 17px;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #preview, #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .invoice {
+    box-shadow: none;
+  }
+  }
