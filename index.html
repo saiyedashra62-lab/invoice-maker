@@ -1,90 +1,142 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>InvoicePro - Free Invoice Maker</title>
-
-  <meta name="description" content="Create professional invoices online for free.">
-
+  <meta name="description" content="Create clean professional invoices online.">
+  <title>InvoicePro — Invoice Generator</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-  <div class="logo">Invoice<span>Pro</span></div>
-  <span class="tag">FREE INVOICE MAKER</span>
+<header class="navbar">
+  <a class="brand" href="#">Invoice<span>Pro.</span></a>
+  <span class="nav-label">INVOICE GENERATOR</span>
 </header>
 
-<main>
+<main class="container">
 
-  <section class="hero">
-    <h1>Create Professional Invoices</h1>
-    <p>Simple, fast and free invoice generator.</p>
-  </section>
-
-  <section class="panel">
-
-    <h2>Business Details</h2>
-
-    <input id="business" placeholder="Business Name">
-    <input id="businessEmail" placeholder="Business Email">
-
-    <h2>Customer Details</h2>
-
-    <input id="customer" placeholder="Customer Name">
-    <input id="customerEmail" placeholder="Customer Email">
-
-    <h2>Invoice Details</h2>
-
-    <input id="invoiceNo" placeholder="Invoice Number">
-    <input id="invoiceDate" type="date">
-
-    <h2>Products / Services</h2>
-
-    <div id="products"></div>
-
-    <button class="add" onclick="addProduct()">
-      + Add Product
-    </button>
-
-    <h2>GST Settings</h2>
-
-    <select id="gst" onchange="calculate()">
-      <option value="0">No GST</option>
-      <option value="5">5% GST</option>
-      <option value="12">12% GST</option>
-      <option value="18">18% GST</option>
-      <option value="28">28% GST</option>
-    </select>
-
-    <div class="total">
-      <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
-      <p>GST: ₹<span id="tax">0.00</span></p>
-      <h2>Total: ₹<span id="grandTotal">0.00</span></h2>
+  <section class="heading">
+    <div>
+      <p class="eyebrow">SIMPLE BILLING</p>
+      <h1>Create an invoice</h1>
+      <p class="subheading">Enter your details and generate a professional invoice.</p>
     </div>
-
-    <button class="generate" onclick="generateInvoice()">
-      Generate Invoice
-    </button>
-
-    <button class="download" onclick="window.print()">
-      Download / Print PDF
-    </button>
-
+    <span class="free-label">FREE TOOL</span>
   </section>
 
-  <section id="preview" class="preview"></section>
+  <div class="workspace">
 
+    <section class="form-panel">
+
+      <div class="section-heading">
+        <h2>Invoice details</h2>
+        <span>01</span>
+      </div>
+
+      <div class="field">
+        <label>Invoice number</label>
+        <input id="invoiceNo" placeholder="INV-001">
+      </div>
+
+      <div class="field">
+        <label>Invoice date</label>
+        <input id="invoiceDate" type="date">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-heading">
+        <h2>Your business</h2>
+        <span>02</span>
+      </div>
+
+      <div class="field">
+        <label>Business name</label>
+        <input id="business" placeholder="Your business name">
+      </div>
+
+      <div class="field">
+        <label>Business email</label>
+        <input id="businessEmail" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-heading">
+        <h2>Bill to</h2>
+        <span>03</span>
+      </div>
+
+      <div class="field">
+        <label>Customer name</label>
+        <input id="customer" placeholder="Customer name">
+      </div>
+
+      <div class="field">
+        <label>Customer email</label>
+        <input id="customerEmail" type="email" placeholder="customer@example.com">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-heading">
+        <h2>Items</h2>
+        <span>04</span>
+      </div>
+
+      <div id="products"></div>
+
+      <button class="add-button" id="addProduct" type="button">
+        + Add item
+      </button>
+
+      <div class="divider"></div>
+
+      <div class="section-heading">
+        <h2>Tax</h2>
+        <span>05</span>
+      </div>
+
+      <div class="field">
+        <label>GST rate</label>
+        <select id="gst">
+          <option value="0">No GST</option>
+          <option value="5">5%</option>
+          <option value="12">12%</option>
+          <option value="18">18%</option>
+          <option value="28">28%</option>
+        </select>
+      </div>
+
+    </section>
+
+    <aside class="preview-panel">
+
+      <div class="preview-top">
+        <div>
+          <p class="eyebrow">LIVE PREVIEW</p>
+          <h2>Your invoice</h2>
+        </div>
+        <span class="live-dot">Live</span>
+      </div>
+
+      <div id="preview" class="invoice-paper"></div>
+
+      <button id="download" class="download-button" type="button">
+        Download PDF
+      </button>
+
+      <p class="privacy-note">Your invoice is generated in your browser.</p>
+
+    </aside>
+
+  </div>
 </main>
 
-<footer>
-  Made with ❤️ | InvoicePro
-</footer>
+<footer>© 2026 InvoicePro</footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
