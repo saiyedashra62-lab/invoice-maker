@@ -1,165 +1,16 @@
+
 const products = document.getElementById("products");
+const preview = document.getElementById("preview");
 
-function addProduct() {
-
-  const row = document.createElement("div");
-
-  row.className = "product";
-
-  row.innerHTML = `
-    <input class="pname" placeholder="Product Name">
-    <input class="qty" type="number" min="1" value="1">
-    <input class="price" type="number" min="0" placeholder="Price">
-    <button type="button" onclick="removeProduct(this)">X</button>
-  `;
-
-  products.appendChild(row);
-
-  row.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", calculate);
-  });
-
-  calculate();
-}
-
-function removeProduct(button) {
-  button.parentElement.remove();
-  calculate();
-}
-
-function calculate() {
-
-  let subtotal = 0;
-
-  document.querySelectorAll(".product").forEach(row => {
-
-    const qty = Number(row.querySelector(".qty").value) || 0;
-    const price = Number(row.querySelector(".price").value) || 0;
-
-    subtotal += qty * price;
-
-  });
-
-  const rate = Number(document.getElementById("gst").value);
-
-  const tax = subtotal * rate / 100;
-
-  const total = subtotal + tax;
-
-  document.getElementById("subtotal").textContent =
-    subtotal.toFixed(2);
-
-  document.getElementById("tax").textContent =
-    tax.toFixed(2);
-
-  document.getElementById("grandTotal").textContent =
-    total.toFixed(2);
-
-}
-
-function generateInvoice() {
-
-  const business = document.getElementById("business").value;
-  const customer = document.getElementById("customer").value;
-
-  if (!business || !customer) {
-    alert("Please enter business and customer names.");
-    return;
-  }
-
-  const invoiceNo =
-    document.getElementById("invoiceNo").value || "INV-001";
-
-  const date =
-    document.getElementById("invoiceDate").value;
-
-  let rows = "";
-
-  document.querySelectorAll(".product").forEach(row => {
-
-    const name = row.querySelector(".pname").value;
-    const qty = Number(row.querySelector(".qty").value) || 0;
-    const price = Number(row.querySelector(".price").value) || 0;
-
-    if (!name || qty <= 0 || price < 0) return;
-
-    rows += `
-      <tr>
-        <td>${escapeHTML(name)}</td>
-        <td>${qty}</td>
-        <td>₹${price.toFixed(2)}</td>
-        <td>₹${(qty * price).toFixed(2)}</td>
-      </tr>
-    `;
-
-  });
-
-  if (!rows) {
-    alert("Please add at least one valid product.");
-    return;
-  }
-
-  const subtotal =
-    Number(document.getElementById("subtotal").textContent);
-
-  const tax =
-    Number(document.getElementById("tax").textContent);
-
-  const total =
-    Number(document.getElementById("grandTotal").textContent);
-
-  document.getElementById("preview").innerHTML = `
-
-    <div class="invoice">
-
-      <h1>INVOICE</h1>
-
-      <h2>${escapeHTML(business)}</h2>
-
-      <p>${escapeHTML(document.getElementById("businessEmail").value)}</p>
-
-      <hr>
-
-      <p><b>Invoice:</b> ${escapeHTML(invoiceNo)}</p>
-      <p><b>Date:</b> ${escapeHTML(date)}</p>
-
-      <h3>Bill To: ${escapeHTML(customer)}</h3>
-
-      <p>${escapeHTML(document.getElementById("customerEmail").value)}</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-
-        <tbody>${rows}</tbody>
-
-      </table>
-
-      <br>
-
-      <h3>Subtotal: ₹${subtotal.toFixed(2)}</h3>
-      <h3>GST: ₹${tax.toFixed(2)}</h3>
-      <h2>Grand Total: ₹${total.toFixed(2)}</h2>
-
-      <br>
-
-      <p>Thank you for your business!</p>
-
-    </div>
-
-  `;
-
-  document.getElementById("preview").scrollIntoView({
-    behavior: "smooth"
-  });
-
-}
+const fields = [
+  "invoiceNo",
+  "invoiceDate",
+  "business",
+  "businessEmail",
+  "customer",
+  "customerEmail",
+  "gst"
+];
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -170,5 +21,164 @@ function escapeHTML(value) {
     "'": "&#39;"
   })[char]);
 }
+
+function addProduct() {
+  const row = document.createElement("div");
+  row.className = "product-row";
+
+  row.innerHTML = `
+    <input class="pname" placeholder="Item name">
+    <input class="qty" type="number" min="1" value="1">
+    <input class="price" type="number" min="0" step="0.01" placeholder="Price">
+    <button type="button" class="remove-item" aria-label="Remove item">×</button>
+  `;
+
+  products.appendChild(row);
+
+  row.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", updatePreview);
+  });
+
+  row.querySelector(".remove-item").addEventListener("click", () => {
+    row.remove();
+    updatePreview();
+  });
+
+  updatePreview();
+}
+
+function getData() {
+  const items = [];
+
+  document.querySelectorAll(".product-row").forEach(row => {
+    const name = row.querySelector(".pname").value.trim();
+    const qty = Number(row.querySelector(".qty").value);
+    const price = Number(row.querySelector(".price").value);
+
+    if (name && Number.isFinite(qty) && qty > 0 &&
+        Number.isFinite(price) && price >= 0) {
+      items.push({
+        name,
+        qty,
+        price,
+        amount: qty * price
+      });
+    }
+  });
+
+  const subtotal = items.reduce((sum, item) => sum + item.amount, 0);
+  const rate = Number(document.getElementById("gst").value);
+  const tax = subtotal * rate / 100;
+
+  return {
+    business: document.getElementById("business").value,
+    businessEmail: document.getElementById("businessEmail").value,
+    customer: document.getElementById("customer").value,
+    customerEmail: document.getElementById("customerEmail").value,
+    invoiceNo: document.getElementById("invoiceNo").value,
+    date: document.getElementById("invoiceDate").value,
+    items,
+    subtotal,
+    rate,
+    tax,
+    total: subtotal + tax
+  };
+}
+
+function money(value) {
+  return "₹" + value.toFixed(2);
+}
+
+function updatePreview() {
+  const data = getData();
+
+  const itemRows = data.items.map(item => `
+    <tr>
+      <td>${escapeHTML(item.name)}</td>
+      <td>${item.qty}</td>
+      <td>${money(item.price)}</td>
+      <td>${money(item.amount)}</td>
+    </tr>
+  `).join("");
+
+  preview.innerHTML = `
+    <div class="invoice-header">
+      <div>
+        <h2>${escapeHTML(data.business || "Your Business")}</h2>
+        <p style="font-size:11px;color:#7b8495">
+          ${escapeHTML(data.businessEmail)}
+        </p>
+      </div>
+      <div class="invoice-title">INVOICE</div>
+    </div>
+
+    <div class="invoice-meta">
+      <strong>Invoice:</strong> ${escapeHTML(data.invoiceNo || "INV-001")}<br>
+      <strong>Date:</strong> ${escapeHTML(data.date || "—")}
+    </div>
+
+    <div class="bill-to">
+      BILL TO<br>
+      <strong>${escapeHTML(data.customer || "Customer name")}</strong><br>
+      ${escapeHTML(data.customerEmail)}
+    </div>
+
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemRows || '<tr><td colspan="4">No items added</td></tr>'}
+      </tbody>
+    </table>
+
+    <div class="totals">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <strong>${money(data.subtotal)}</strong>
+      </div>
+      <div class="total-row">
+        <span>GST (${data.rate}%)</span>
+        <strong>${money(data.tax)}</strong>
+      </div>
+      <div class="total-row grand-total">
+        <span>Total</span>
+        <strong>${money(data.total)}</strong>
+      </div>
+    </div>
+
+    <div class="thank-you">
+      Thank you for your business.
+    </div>
+  `;
+}
+
+fields.forEach(id => {
+  document.getElementById(id).addEventListener("input", updatePreview);
+  document.getElementById(id).addEventListener("change", updatePreview);
+});
+
+document.getElementById("addProduct").addEventListener("click", addProduct);
+
+document.getElementById("download").addEventListener("click", () => {
+  const data = getData();
+
+  if (!data.business.trim() || !data.customer.trim() || !data.items.length) {
+    alert("Enter business name, customer name and at least one valid item.");
+    return;
+  }
+
+  window.print();
+});
+
+document.getElementById("invoiceDate").value =
+  new Date().toISOString().slice(0, 10);
+
+document.getElementById("invoiceNo").value = "INV-001";
 
 addProduct();
