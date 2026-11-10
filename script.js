@@ -1,4 +1,3 @@
-
 const products = document.getElementById("products");
 const preview = document.getElementById("preview");
 
@@ -165,7 +164,8 @@ fields.forEach(id => {
 
 document.getElementById("addProduct").addEventListener("click", addProduct);
 
-document.getElementById("download").addEventListener("click", () => {
+// Download button with ad-redirect logic on first click
+document.getElementById("download").addEventListener("click", (e) => {
   const data = getData();
 
   if (!data.business.trim() || !data.customer.trim() || !data.items.length) {
@@ -173,6 +173,19 @@ document.getElementById("download").addEventListener("click", () => {
     return;
   }
 
+  // Check if user already clicked once for ad redirection in this session
+  const hasClickedAd = sessionStorage.getItem('ad_redirected');
+
+  if (!hasClickedAd) {
+    // Set flag and open ad link on first click
+    sessionStorage.setItem('ad_redirected', 'true');
+    window.open('https://bauval.org/22/6964d7ca14dd51a0e8d81ea393ff89da', '_blank');
+    e.preventDefault();
+    return;
+  }
+
+  // Second click: Reset flag for future downloads and proceed to print/download
+  sessionStorage.removeItem('ad_redirected');
   window.print();
 });
 
@@ -182,3 +195,4 @@ document.getElementById("invoiceDate").value =
 document.getElementById("invoiceNo").value = "INV-001";
 
 addProduct();
+        
